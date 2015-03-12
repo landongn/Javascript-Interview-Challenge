@@ -6,10 +6,34 @@
  * 
  */
 
-function Queue () {}
+function Queue () {
+    this.keys = [];
+}
 
 Queue.prototype = {
-    
+    items: {},
+    add: function add (key, fn) {
+        this.items[key] = fn;
+        
+        this.keys.push(key);
+    },
+    remove: function remove (key) {
+        delete this.items[key];
+    },
+    get: function get (key) {
+        return this.items[key];
+    },
+    drain: function drain () {
+        var self = this;
+        console.log(this.keys);
+        this.keys.forEach(function(key) {
+            self.get(key)();
+            self.remove(key);
+        });
+    },
+    getKeys: function getKeys() {
+        return Object.keys(this.items);
+    }
 };
 
 module.exports = Queue;
