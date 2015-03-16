@@ -7,7 +7,22 @@
  * @param  {Number}   timeout   the milliseconds to wait before accepting input
  * @param  {Boolean}  immediate if true, the provided fn should execute immediately
  */
-module.exports = function (fn, timeout, immediate) {
-    
-};
+var canContinue = true;
 
+module.exports = function (fn, timeout, immediate) {
+    if (immediate) {
+        fn();
+        return;
+    }
+
+    if (canContinue) {
+        canContinue = false;
+        fn();
+        setTimeout(function() {
+            canContinue = true;
+        }, timeout);
+    } else {
+        return;        
+    }
+
+};
